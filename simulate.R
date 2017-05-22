@@ -1,21 +1,33 @@
+# simulate non-linear data of two groups with missingness
+
+set.seed(1);
+
+# generate data
 
 N <- 100;
 sigma <- 0.1;
 
-x <- seq(0, 4*pi, length.out=N) + rnorm(N, sd = 0.1);
+x <- sort(seq(0, 4*pi, length.out=N) + rnorm(N, sd = 0.1));
 
-y_a <- rnorm(N, mean = sin(x), sd = sigma);
-y_b <- rnorm(N, mean = sin(x) + pi/3, sd = sigma);
+m_a <- sin(x);
+m_b <- sin(x + pi/3);
+
+y_a <- rnorm(N, mean = m_a, sd = sigma);
+y_b <- rnorm(N, mean = m_b, sd = sigma);
 
 g <- sample(c(-0.5, 0.5), N, replace=TRUE);
+# either one group or the other is observed
+# group probabilities are equal; each group has ~50% missingness
+y <- ifelse(g > 0, y_b, y_a);
 
-f <- y_b - y_a;
+# latent variable to be inferred
+f <- m_b - m_a;
 
 data <- list(
 	# inputs
 	J = N,
 	x = x,
-	y = ifelse(g > 0, y_b, y_a),
+	y = y,
 	g = g,
 	# answers
 	f = f,
@@ -23,6 +35,22 @@ data <- list(
 	y_b = y_b,
 	sigma = sigma
 );
+
+
+# plot data
+
+par(mfrow=c(3, 1));
+
+plot(c(x, x), c(y_a, y_b), xlab="x", ylab="y", type="n", main = "original data");
+lines(x, y_a, col=3, type="b");
+lines(x, y_b, col=4, type="b");
+
+plot(x, y, col=as.numeric(g > 0)+3, main = "data with missingness");
+
+plot(x, f, main = "difference in mean");
+
+
+# write data
 
 saveRDS(data, "gp-compare_sim-data.rds");
 
