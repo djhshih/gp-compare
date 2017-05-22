@@ -59,6 +59,9 @@ parameters {
 	// characteristic length scale
 	real<lower=0> lambda;
 
+	// baseline shift
+	real mu;
+
 	// std of the observation model
 	real<lower=0> sigma;
 
@@ -102,8 +105,9 @@ model {
 
   alpha ~ gamma(1, 1);
 	lambda ~ gamma(2, 2);
-
+	
+	mu ~ normal(0, 1);
   sigma ~ gamma(0.5, 2);
-  y ~ normal(f .* g, sigma);
+  y ~ normal(mu + (f .* g), sigma);
 }
 
