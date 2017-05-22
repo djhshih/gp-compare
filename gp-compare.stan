@@ -91,23 +91,23 @@ transformed parameters {
 			K[j, j] = K[j, j] + 1e-5;
 		}
 		
-		if (J == M) {
-			f = calculate_f(K, f_eta, J);
-		} else {
+		if (M < J) {
 			f = approximate_f(K, f_eta, u, J, M);
+		} else {
+			f = calculate_f(K, f_eta, J);
 		}
 	}
 }
 
 model {
 	u ~ uniform(0, 1);
-  f_eta ~ normal(0, 1);
+	f_eta ~ normal(0, 1);
 
-  alpha ~ gamma(1, 1);
+	alpha ~ gamma(1, 1);
 	lambda ~ gamma(2, 2);
 	
 	mu ~ normal(0, 1);
-  sigma ~ gamma(0.5, 2);
-  y ~ normal(mu + (f .* g), sigma);
+	sigma ~ gamma(0.5, 2);
+	y ~ normal(mu + (f .* g), sigma);
 }
 
