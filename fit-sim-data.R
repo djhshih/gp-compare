@@ -20,9 +20,9 @@ f.mcmc.lower <- apply(f.mcmc, 2, function(z) quantile(z, 0.025));
 f.mcmc.upper <- apply(f.mcmc, 2, function(z) quantile(z, 0.975));
 
 with(data, {
-	plot(NA, xlim=c(0, 12), ylim=c(-2, 2));
+	plot(NA, xlim=c(0, 12), ylim=c(-2, 3));
 	points(x, f);
-	points(x, f.mcmc.mean, col=2);
+	points(x, f.mcmc.mean, col="grey60");
 	lines(x, f.mcmc.lower, col="grey", type="l");
 	lines(x, f.mcmc.upper, col="grey", type="l");
 });

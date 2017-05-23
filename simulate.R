@@ -10,7 +10,7 @@ sigma <- 0.1;
 x <- sort(seq(0, 4*pi, length.out=N) + rnorm(N, sd = 0.1));
 
 m_a <- sin(x);
-m_b <- sin(x + pi/3);
+m_b <- sin(x/(pi/2) - 7*pi/2) + 0.5;
 
 y_a <- rnorm(N, mean = m_a, sd = sigma);
 y_b <- rnorm(N, mean = m_b, sd = sigma);
@@ -39,13 +39,17 @@ data <- list(
 
 # plot data
 
-par(mfrow=c(3, 1));
+par(mfrow=c(4, 1));
 
-plot(c(x, x), c(y_a, y_b), xlab="x", ylab="y", type="n", main = "original data");
-lines(x, y_a, col=3, type="b");
-lines(x, y_b, col=4, type="b");
+plot(c(x, x), c(m_a, m_b), xlab="x", ylab="y", type="n", main = "original data");
+lines(x, m_a, col=3);
+lines(x, m_b, col=4);
 
-plot(x, y, col=as.numeric(g > 0)+3, main = "data with missingness");
+plot(c(x, x), c(y_a, y_b), xlab="x", ylab="y", type="n", main = "data with noise");
+points(x, y_a, col=3);
+points(x, y_b, col=4);
+
+plot(x, y, col=as.numeric(g > 0)+3, main = "data with noise and missingness");
 
 plot(x, f, main = "difference in mean");
 
