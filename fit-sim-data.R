@@ -8,6 +8,9 @@ data$M <- data$J;
 # use Nystr\"om approximation
 #data$M <- floor(data$J * 0.2);
 
+# if g is in {0, 1} instead of {-0.5, 0.5}, model misbehaves
+#data$g <- data$g + 0.5;
+
 options(mc.cores=2);
 fit <- stan(
 	file="gp-compare.stan",
